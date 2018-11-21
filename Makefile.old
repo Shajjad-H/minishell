@@ -1,0 +1,41 @@
+CC := gcc
+
+#required libraries brew install libsndfile
+SRCDIR := src
+BINDIR := bin
+OBJDIR := obj
+
+SRCEXT := c
+
+EXE := runner
+
+SRC := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJ := $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(notdir $(SRC)))))
+INC := -Isrc/h
+
+LDFLAGS := -lsndfile
+CFLAGS := -Wall
+
+#tmp:
+#	@echo $(SRC); echo $(OBJ)
+
+$(BINDIR)/$(EXE): $(OBJ)
+	@echo "Linking..."
+	@mkdir -p $(BINDIR)
+	@echo "$(CC) $(LDFLAGS) -o $@ $^"; $(CC) $(LDFLAGS) -o $@ $^
+
+$(OBJ): $(SRC)
+	@mkdir -p $(OBJDIR)
+	@echo "$(CC) $(INC) -o $@ -c $< $(CFLAGS)"; $(CC) $(INC) -o $@ -c $< $(CFLAGS)
+
+%.o: %.c
+
+	@$(CC) -o $@ -c $< $(CFLAGS)
+
+.PHONY: clean cpr
+
+clean:
+	@echo "rm $(OBJ)"; rm $(OBJDIR)/*.o
+
+cpr: clean
+	@rm $(BINDIR)/*
