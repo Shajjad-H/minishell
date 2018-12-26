@@ -1,41 +1,34 @@
-CC := gcc
+CC := g++ # This is the main compiler
+# CC := clang --analyze # and comment out the linker last line for sanity
+SRCDIR := src/cpp
+BUILDDIR := obj
+TARGET_DIR := bin
+TARGET := bin/runner
+ 
+SRCEXT := cpp
+SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+CFLAGS := -g -Wall -std=c++11 -Wall -O3 #-fsanitize=address -g3
+LIB := 
+INC := -Isrc/hpp
 
-#required libraries brew install libsndfile
-SRCDIR := src
-BINDIR := bin
-OBJDIR := obj
+DEP = $(OBJECTS:%.o=%.d)
 
-SRCEXT := c
+$(TARGET): $(OBJECTS)
+	@echo " Linking..."
+	@mkdir -p $(TARGET_DIR)
+	@echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
 
-EXE := runner
+-include $(DEP)
 
-SRC := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJ := $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(notdir $(SRC)))))
-INC := -Isrc/h
-
-LDFLAGS := -lsndfile
-CFLAGS := -Wall
-
-#tmp:
-#	@echo $(SRC); echo $(OBJ)
-
-$(BINDIR)/$(EXE): $(OBJ)
-	@echo "Linking..."
-	@mkdir -p $(BINDIR)
-	@echo "$(CC) $(LDFLAGS) -o $@ $^"; $(CC) $(LDFLAGS) -o $@ $^
-
-$(OBJ): $(SRC)
-	@mkdir -p $(OBJDIR)
-	@echo "$(CC) $(INC) -o $@ -c $< $(CFLAGS)"; $(CC) $(INC) -o $@ -c $< $(CFLAGS)
-
-%.o: %.c
-
-	@$(CC) -o $@ -c $< $(CFLAGS)
-
-.PHONY: clean cpr
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(BUILDDIR)
+	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
-	@echo "rm $(OBJ)"; rm $(OBJDIR)/*.o
+	@echo " Cleaning..."; 
+	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
 
-cpr: clean
-	@rm $(BINDIR)/*
+
+
+.PHONY: clean
