@@ -8,103 +8,101 @@
 namespace msh{
 
 
-template<typename D>
-class Vec {
+	template<typename D>
+	class Vec {
 
-private:
-	D * m_data;
-	size_v m_size;
-	size_v m_capacity;
-public:
-	Vec();
-	Vec(const Vec<D> & v);
-	Vec(const size_v capacity,const D & initilizer);
-	virtual ~Vec();
-	size_v size() const;
-	D& operator[](const size_v index);
-	const Vec<D> operator=(const Vec<D> &v);
-	bool operator==(const Vec<D> &v) const;
-	void erase();
-	bool isEmpty() const;
-	const D at(const size_v index) const;
-	void reserve(const size_v capacity);
-	void push_back(const D & data);
-	size_v capacity() const;
+	private:
+		D * m_data;
+		size_v m_size;
+		size_v m_capacity;
+	public:
+		Vec();
+		Vec(const Vec<D> & v);
+		Vec(const size_v capacity, const D & initilizer);
+		virtual ~Vec();
+		size_v size() const;
+		D& operator[](const size_v index);
+		const Vec<D> operator=(const Vec<D> &v);
+		bool operator==(const Vec<D> &v) const;
+		void erase();
+		bool isEmpty() const;
+		const D at(const size_v index) const;
+		void reserve(const size_v capacity);
+		void push_back(const D & data);
+		size_v capacity() const;
 
-}
+	};
 
-
-template<typename D>
-Vec<D>::Vec()
-{
-	m_data = NULL;
-	m_size = 0;
-	m_capacity = 1;
-}
-
-
-template<typename D>
-Vec<D>::Vec(const Vec<D> & v)
-{
-	reserve(v.capacity());
-	for(size_v i=0; i<v.size(); i++)
-		m_data[i] = v.at(i);
-
-}
+	template<typename D> 
+	Vec<D>::Vec()
+	{
+		m_data = NULL;
+		m_size = 0;
+		m_capacity = 1;
+	}
 
 
-template<typename D>
-Vec<D>::~Vec()
-{
-	erase();
-}
+	template<typename D>
+	Vec<D>::Vec(const Vec<D> & v)
+	{
+		reserve(v.capacity());
+		for(size_v i=0; i<v.size(); i++)
+			m_data[i] = v.at(i);
+
+	}
 
 
-template<typename D>
-const D at(const size_v index) const
-{
-	if(index < m_size)
-		return m_data[index];
-	// exit msg should be defined after
-	// for acessing non reserved memory
-	exit(3);
-}
+	template<typename D>
+	Vec<D>::~Vec()
+	{
+		erase();
+	}
 
 
-template<typename D>
-void Vec<D>::reserve(const size_v capacity)
-{
-	erase();
-	if(capacity == 0)
+	template<typename D>
+	const D Vec<D>::at(const size_v index) const
+	{
+		if(index < m_size)
+			return m_data[index];
+		// exit msg should be defined after
+		// for acessing non reserved memory
 		exit(3);
-
-	m_data = new Vec<D>[capacity];
-	m_capacity = capacity;
-}
+	}
 
 
-template<typename D>
-bool Vec<D>::isEmpty() const
-{
-	return m_size == 0;
-}
+	template<typename D>
+	void Vec<D>::reserve(const size_v capacity)
+	{
+		erase();
+		if(capacity == 0)
+			exit(3);
+
+		m_data = new Vec<D>[capacity];
+		m_capacity = capacity;
+	}
 
 
-template<typename D>
-void Vec<D>::erase()
-{
-	if(m_data == NULL)
-		return;
+	template<typename D>
+	bool Vec<D>::isEmpty() const
+	{
+		return m_size == 0;
+	}
 
-	delete[] m_data;
-	m_data = NULL;
-	m_size = 0;
-	m_capacity = 1;
-}
+
+	template<typename D>
+	void Vec<D>::erase()
+	{
+		if(m_data != NULL)
+			delete[] m_data;
+		
+		m_data = NULL;
+		m_size = 0;
+		m_capacity = 1;
+
+	}
 
 }
 #endif
-
 
 
 

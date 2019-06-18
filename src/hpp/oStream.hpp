@@ -37,7 +37,7 @@ void perr(const l_int n,  const int fd=2);
 // template functions implementations
 
 template<typename T>
-l_int print(const int fd,const T & data, const l_int size)
+l_int print(const int fd, const T & data, const l_int size)
 {
 	l_int data_wrote = 0;
 	// if the data can't be written at once
@@ -59,6 +59,7 @@ void print(const char * str, const int fd=1)
 {
 	msh::print(fd,*str,msh::str_len(str));
 }
+
 void perr(const char * str, const int fd=2)
 {
 	msh::print(fd,*str,msh::str_len(str));

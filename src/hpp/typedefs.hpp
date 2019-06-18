@@ -6,4 +6,6 @@ typedef unsigned int size_v;
 typedef long int l_int;
 const unsigned short int L_INT_SIZE = 8;
 
+typedef u_int16_t error_code_type;
+
 #endif
