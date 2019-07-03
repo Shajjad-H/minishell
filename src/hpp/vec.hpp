@@ -6,10 +6,11 @@
 
 namespace msh
 {
+	typedef unsigned int size_v;
+
 	template <typename D>
-	class Vec : public Printable
+	class Vec : virtual public Printable
 	{
-		typedef unsigned int size_v;
 
 	private:
 		D * m_data;
@@ -31,8 +32,11 @@ namespace msh
 		void erase();
 		bool isEmpty() const;
 		const D at(const size_v index) const;
-		void reserve(const size_v capacity);
+		void reserve(const size_v size);
+		void reserve(const size_v size, const D &initilizer);
 		void push_back(const D &data);
+		void push(const D &data);
+		D pop();
 		size_v capacity() const;
 
 		void out(std::ostream &out_stream) const;
@@ -41,22 +45,19 @@ namespace msh
 
 
 
-	// template implementation must be in header files
-
-
+// template implementation must be in header files
 
 	template <typename D>
 	Vec<D>::Vec()
 	{
-		m_data = NULL;
-		m_size = 0;
-		m_capacity = 1;
+		erase();
 	}
 
 	template <typename D>
 	Vec<D>::Vec(const Vec<D> &v)
 	{
-		reserve(v.capacity());
+		reserve(v.size());
+
 		for (size_v i = 0; i < v.size(); i++)
 			m_data[i] = v.at(i);
 	}
@@ -66,6 +67,14 @@ namespace msh
 	{
 		erase();
 	}
+
+
+	template <typename D>
+	size_v Vec<D>::size() const 
+	{
+		return m_size;
+	}
+
 
 	template <typename D>
 	const D Vec<D>::at(const size_v index) const
@@ -77,22 +86,37 @@ namespace msh
 		exit(3);
 	}
 
+
 	template <typename D>
-	void Vec<D>::reserve(const size_v capacity)
+	void Vec<D>::reserve(const size_v size)
 	{
 		erase();
-		if (capacity == 0)
-			exit(3);
 
-		m_data = new Vec<D>[capacity];
-		m_capacity = capacity;
+		if (size == 0)	return;
+
+		m_data 		= new D[size];
+		m_size		= size;
+		m_capacity 	= size;
 	}
+
+
+	template <typename D>
+	void Vec<D>::reserve(const size_v size, const D & initilizer)
+	{
+		this->reserve(size);
+
+		for(size_v i = 0; i < size; i++) 
+			this->m_data[i] = initilizer;
+		
+	}
+
 
 	template <typename D>
 	bool Vec<D>::isEmpty() const
 	{
 		return m_size == 0;
 	}
+
 
 	template <typename D>
 	void Vec<D>::erase()
@@ -112,7 +136,16 @@ namespace msh
 		out_stream<<"size: "<<m_size<<" capacity: "<<m_capacity<<" ";
 	}
 
-} // namespace msh
 
+	template <typename D>
+    void Vec<D>::in(std::istream &in_stream) 
+	{
+		
+	}
+
+
+	
+
+} // namespace msh
 
 #endif
