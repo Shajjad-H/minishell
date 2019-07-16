@@ -14,6 +14,7 @@ cmake_install.cmake
 *.obj
 obj/*
 bin/*
+bin
 
 # Precompiled Headers
 *.gch
