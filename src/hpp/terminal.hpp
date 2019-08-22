@@ -1,25 +1,28 @@
+#ifndef __MSH__TERMINAL__HPP__
+#define __MSH__TERMINAL__HPP__
 
+#include <string>
+#include <vector>
 
 
 class Terminal
 {
-private:
-    /* data */
-public:
-    Terminal(/* args */);
-    ~Terminal();
-    void get_input(const int fd = 0);
-    void print_output(const int fd = 1);
-    bool verify_cmd() const;
-    void parse_cmd();
+
+protected:
+    bool running;
+    std::string input;
+    std::string output;
+    std::string terminal_name;
+    std::vector<int> parsed_cmd;
+
+    void get_input();
+    void print_output();
+    bool parse_cmd();
     bool execute_cmd();
+public:
+    Terminal(const char * ternimal_name);
+    ~Terminal();
     void run();
 };
 
-Terminal::Terminal(/* args */)
-{
-}
-
-Terminal::~Terminal()
-{
-}
+#endif

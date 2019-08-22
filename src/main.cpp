@@ -1,9 +1,17 @@
-#include "vec.hpp"
-#include "printable.hpp"
+#include "terminal.hpp"
 
-using namespace msh;
+/*
+	04 72 44 83 09
+	scolarote.informatique@uni
+	04 72 43 10 47 
+*/
 
 int main()
 {
+
+	Terminal main_terminal("mini shell");
+	main_terminal.run();
+
 	return 0;
 }
+
